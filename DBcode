@@ -1,0 +1,45 @@
+drop table member;
+create table member(
+user_id varchar2(20) primary key,
+name nvarchar2(20) not null,
+pw varchar2(20) not null,
+hp varchar2(20),
+sex varchar2(20) not null
+);
+
+insert into member (user_id,name,pw,hp,sex) values ('abc1234', '홍길동', '2424', '01012344555', '남');
+insert into member (user_id,name,pw,hp,sex) values ('adt3535', '김민석', 'ajofs3424', '01033335543', '남');
+insert into member (user_id,name,pw,hp,sex) values ('uub34322', '이주리', 'qjrwo4', '01012424235', '여');
+insert into member (user_id,name,pw,hp,sex) values ('111ihwg', '김지영', '23535wjrow', '01012364364', '여');
+insert into member (user_id,name,pw,hp,sex) values ('9994343', '한세리', 'askdoasf', '01012754599', '여');
+
+drop table board;
+create table board(
+board_name nvarchar2(20) primary key
+);
+insert into board (board_name) values('COR');
+insert into board (board_name) values('WHE');
+insert into board (board_name) values('DUS');
+
+drop table post;
+create table post(
+post_id number(5) primary key,
+title nvarchar2(80) not null,
+user_id varchar2(20),
+content nvarchar2(1000),  
+board_name nvarchar2(20),
+view_count number(20) default 0,
+Wtime date default sysdate,
+CONSTRAINT pst_memuser_id_fk foreign key(user_id)
+REFERENCES member(user_id),
+CONSTRAINT pst_brdname_fk foreign key(board_name)
+REFERENCES board(board_name));
+
+insert into post(post_id, title, user_id, content, board_name)
+values('0','Test','abc1234','TEST','COR');
+insert into post(post_id, title, user_id, content, board_name)
+values((select nvl(max(post_id),0)+1 from post),'Test2','adt3535','TEST2','WHE');
+insert into post(post_id, title, user_id, content, board_name)
+values((select nvl(max(post_id),0)+1 from post),'Test3','uub34322','TEST3','DUS');
+insert into post(post_id, title, user_id, content, board_name)
+values((select nvl(max(post_id),0)+1 from post),'Test4','9994343','TEST4','COR');
